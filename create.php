@@ -1,5 +1,7 @@
 <?php
 
+    // controller
+    
     // 外部ファイルの読み込み
     require_once 'MessageDAO.php';
 
@@ -37,5 +39,12 @@
             echo 'PDO exception: ' . $e->getMessage();
             exit;
         }
+    }else{
+        // フラッシュメッセージのセット
+        $_SESSION['flash_message'] = '不正アクセスです';
+        
+        // 画面遷移
+        header('Location: index.php');
+        exit;
     }
     
