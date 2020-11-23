@@ -1,5 +1,4 @@
- <?php 
- 
+<?php 
     // controller
     
     // 外部ファイルの読み込み   
