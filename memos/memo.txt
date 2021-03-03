@@ -1,34 +1,87 @@
-### 環境設定 -----
-
-# PHP 設定
+### Setting
+## PHP 
 php --version
-# PHP 5.6.40 (cli) (built: Oct 31 2019 20:35:16) 
+# Amazon Linux default
+# PHP 5.6.40
 
-# PDO 設定
+sudo yum update -y
+# sudo yum -y install php72 php72-mbstring php72-pdo
+sudo yum -y install php72 php72-mbstring php72-pdo php72-intl php72-pdo_mysql php72-pdo_pgsql php72-xdebug php72-opcache php72-apcu
+sudo unlink /usr/bin/php
+sudo ln -s /etc/alternatives/php7 /usr/bin/php
+php --version
+# PHP 7.2.34 (cli) (built: Oct 21 2020 19:52:01) ( NTS )
+
+## MySQL
 mysql --version
-#mysql  Ver 14.14 Distrib 5.5.62, for Linux (x86_64) using readline 5.1
+# mysql  Ver 14.14 Distrib 5.5.62, for Linux (x86_64) using readline 5.1
 
-# 日本語設定
+sudo service mysqld start
+mysql -u root
+mysql> show variables like '%char%';
+mysql> exit;
+
 sed -e "/utf8/d" -e "/client/d" -e "/^\[mysqld_safe\]$/i character-set-server=utf8\n\n[client]\ndefault-character-set=utf8" /etc/my.cnf |sudo tee /etc/my.cnf
+sudo service mysqld restart
+mysql -u root
+mysql> show variables like '%char%';
+mysql> exit;
 
+## Timezone
+date
+echo "Asia/Tokyo" | sudo tee /etc/timezone
+sudo mysql_tzinfo_to_sql /usr/share/zoneinfo
+sudo cp /etc/sysconfig/clock /etc/sysconfig/clock.org
+sudo vi /etc/sysconfig/clock
+
+# 書き換え
+ZONE="Asia/Tokyo"
+UTC=true
+
+sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+sudo reboot
+date
+
+## PDO
 php -m | grep pdo
-# pdo_mysql
-# pdo_sqlite
 
-# pdo_mysql がない場合
-sudo yum -y install php71 php71-mbstring php71-pdo
+###  MySQL settings
 
-###  MySQL ----
-create database bbs_basic_mvc character set utf8;
+## MySQL start & login
+sudo service mysqld start
+mysql -u root
 
-create table messages(
-id int primary key auto_increment, 
-name varchar(50) not null,
-title varchar(50) not null,
-body varchar(100) not null,
-image varchar(100) not null,
-created_at timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+## CREATE DATABASE
+mysql> create database bbs_basic_mvc character set utf8;
+
+## CREATE TABLE
+mysql> use bbs_basic_mvc;
+mysql> create table messages(
+    id int primary key auto_increment, 
+    name varchar(50) not null,
+    title varchar(50) not null,
+    body varchar(100) not null,
+    image varchar(100) not null,
+    created_at timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-insert into messages(name, title, body, image) values("山田太郎", "初めての投稿", "秋ですね", "  | 14004332985fa6ae4af06c46.79060213.jpg");
+## Insert dummy data
+mysql> insert into messages(name, title, body, image) values("山田太郎", "初めての投稿", "秋ですね", "  | 14004332985fa6ae4af06c46.79060213.jpg");
 
+## Dump
+mysqldump -u root bbs_basic_mvc > dump.sql
+
+## execute SQL file
+mysql -u root
+# move to dump.sql file using cd command
+mysql> use bbs_basic_mvc;
+mysql> source dump.sql;
+
+### Git/Github
+git init
+git config --global user.name "TakanoriShima"
+git config --global user.email "quark2galaxy@gmail.com"
+git config --global -l
+git add .
+git commit -m "xxx"
+git log

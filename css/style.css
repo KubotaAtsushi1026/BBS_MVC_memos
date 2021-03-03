@@ -1,0 +1,24 @@
+@charset "utf-8";
+h1 {
+    color: blue;
+}
+
+h2{
+    color: red;
+    background-color: pink;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-bottom: 5px;
+    color: red;
+}
+
+img{
+    width: 60%;
+    display: block;
+    margin: 0 auto;
+}

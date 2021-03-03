@@ -1,47 +1,42 @@
 <?php
-
-    // controller
+    // Controller //
     
     // 外部ファイルの読み込み
-    require_once 'MessageDAO.php';
+    require_once 'daos/MessageDAO.php';
     
     // セッション開始
     session_start();
     
-    // 注目している投稿のID
-    $message_id = "";
-    
-    // 注目している投稿
-    $message = "";
-
     // フラッシュメッセージを保存する変数
     $flash_message = "";
     
     // セッションからフラッシュメッセージの取得、削除
-    if(isset($_SESSION['flash_message']) === true){
-        $flash_message = $_SESSION['flash_message'];
-        $_SESSION['flash_message'] = null;
-    }
+    $flash_message = $_SESSION['flash_message'];
+    $_SESSION['flash_message'] = null;
 
     // 注目している投稿のIDを取得
-    if(isset($_GET['id']) === true){
-        $message_id = $_GET['id'];
+    $id = $_GET['id'];
+    
+    // idを指定せずに実行されたならば
+    if($id === "" || $id === null){
+        $_SESSION['error'] = 'IDが指定されていません';
+        header('Location: index.php');
+        exit;
+    }
+
+    // 注目してるメッセージインスタンスを取得
+    $message = MessageDAO::get_message_by_id($id);
+
+    // そのような投稿が存在すれば
+    if($message !== false){
+        // view のインクルード
+        include_once 'views/show_view.php';
     }else{
-        // 画面遷移
+        $_SESSION['error'] = '存在しない投稿です';
         header('Location: index.php');
         exit;
     }
     
-    // 例外処理
-    try {
-        
-        // 注目してるメッセージインスタンスを取得
-        $message = MessageDAO::get_message_by_id($message_id);
-        
-        // view のインクルード
-        include_once 'show_view.php';
+
     
-    } catch (PDOException $e) {
-        echo 'PDO exception: ' . $e->getMessage();
-        exit;
-    }
+    

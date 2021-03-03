@@ -1,38 +1,42 @@
 <?php
-
-    // controller
+    // Controller
     
     // 外部ファイルの読み込み
-    require_once 'MessageDAO.php';
+    require_once 'filters/post_filter.php';
+    require_once 'daos/MessageDAO.php';
     
     // セッションスタート
     session_start();
     
-    // 削除する投稿のID
-    $message_id = "";
+    // 飛んできたidを取得
+    $id = $_POST['id'];
+        
+    // idを指定せずに実行されたならば
+    if($id === ""){
+        $_SESSION['error'] = '不正アクセスです';
+        header('Location: index.php');
+        exit;
+    }
     
-    // POST通信でid値が飛んできたのであれば、
-    if(isset($_POST['id']) === true){
-        
-        // 飛んできたidを取得
-        $message_id = $_POST['id'];
-        
-        // 削除
-        MessageDAO::delete($message_id);
+    // 注目してるメッセージインスタンスを取得
+    $message = MessageDAO::get_message_by_id($id);
+    
+    // そのような投稿が存在すれば
+    if($message !== false){
+        // データベースからデータ削除
+        $flash_message = MessageDAO::delete($id);
         
         // フラッシュメッセージのセット
-        $_SESSION['flash_message'] = '投稿を削除しました';
+        $_SESSION['flash_message'] = $flash_message;
         
         // 画面遷移
         header('Location: index.php');
         exit;
-        
+
     }else{
-        
-        $_SESSION['flash_message'] = '不正アクセスです';
-        // 画面遷移
+        $_SESSION['error'] = '存在しない投稿です';
         header('Location: index.php');
         exit;
-        
     }
+
     
