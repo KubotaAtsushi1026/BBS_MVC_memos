@@ -30,7 +30,7 @@ CREATE TABLE `messages` (
   `image` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `messages` (
 
 LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-INSERT INTO `messages` VALUES (1,'島尚徳','はじめまして！','よろしくお願いします。','1116798298603ef89404bf49.28308666.jpg','2021-03-03 02:46:44'),(2,'木下順子','旅行に行きました！','癒されました ^^','883267360603ef8d374b876.26989407.jpeg','2021-03-03 02:47:47');
+INSERT INTO `messages` VALUES (2,'木下順子','旅行に行きました！','癒されました ^^','883267360603ef8d374b876.26989407.jpeg','2021-03-03 02:47:47'),(3,'島尚徳','はじめまして！','よろしくお願いします。','6617533826040411c1e9594.52057209.jpg','2021-03-04 02:08:28');
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-03-03 11:48:58
+-- Dump completed on 2021-03-04 12:29:50

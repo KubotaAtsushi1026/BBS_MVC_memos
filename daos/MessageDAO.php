@@ -164,33 +164,6 @@ class MessageDAO{
         }
     }
     
-    // 入力チェック
-    public static function validate($message){
-        
-        // エラー配列を空で作成
-        $errors = array();
-        
-        // 名前が入力されていなければ
-        if($message->name === ''){
-            $errors[] = '名前を入力してください';
-        }
-        // タイトルが入力されていなければ
-        if($message->title === ''){
-            $errors[] = 'タイトルを入力してください';
-        }
-        // 本文が入力されていなければ
-        if($message->body === ''){
-            $errors[] = '本文を入力してください';
-        }
-        // 画像が選択されていなければ
-        if($message->image === ''){
-            $errors[] = '画像を選択してください';
-        }
-        
-        // エラー配列を返す
-        return $errors;
-    }
-    
     // ファイルをアップロードするメソッド
     public static function upload(){
         

@@ -7,10 +7,6 @@
     // セッション開始
     session_start();
     
-    // セッションからフラッシュメッセージの取得、削除
-    $flash_message = $_SESSION['flash_message'];
-    $_SESSION['flash_message'] = null;
-    
     // セッションからエラーメッセージの取得、削除
     $errors = $_SESSION['errors'];
     $_SESSION['errors'] = null;

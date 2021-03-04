@@ -36,7 +36,7 @@
         $message->image = $image;
         
         // 入力チェック
-        $errors = MessageDAO::validate($message);
+        $errors = $message->validate($message);
         
         // 入力エラーが1つもなければ
         if(count($errors) === 0){
