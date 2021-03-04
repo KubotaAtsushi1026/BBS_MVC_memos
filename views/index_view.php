@@ -8,7 +8,7 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
-        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="shortcut icon" href="images/favicon.ico">
         <title>簡易掲示板</title>
     </head>
     <body>
