@@ -56,7 +56,7 @@
             </div>
             <?php endif; ?>
             <div class="row mt-5">
-                <a href="new.php" class="btn btn-primary">新規投稿</a>
+                <a href="create.php" class="btn btn-primary">新規投稿</a>
             </div> 
         </div>
         

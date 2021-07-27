@@ -2,7 +2,7 @@
     // Controller //
     
     // 外部ファイルの読み込み
-    require_once 'daos/MessageDAO.php';
+    require_once 'models/Message.php';
     
     // セッション開始
     session_start();
@@ -19,24 +19,25 @@
     
     // idを指定せずに実行されたならば
     if($id === "" || $id === null){
+        // セッションにエラー目セージを保存
         $_SESSION['error'] = 'IDが指定されていません';
+        // リダイレクト
         header('Location: index.php');
         exit;
     }
 
     // 注目してるメッセージインスタンスを取得
-    $message = MessageDAO::get_message_by_id($id);
+    $message = Message::find($id);
 
     // そのような投稿が存在すれば
     if($message !== false){
-        // view のインクルード
+        // view の表示
         include_once 'views/show_view.php';
     }else{
+        // セッションにエラーメッセージを保存
         $_SESSION['error'] = '存在しない投稿です';
+        // リダイレクト
         header('Location: index.php');
         exit;
     }
-    
-
-    
     

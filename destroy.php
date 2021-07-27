@@ -3,7 +3,7 @@
     
     // 外部ファイルの読み込み
     require_once 'filters/post_filter.php';
-    require_once 'daos/MessageDAO.php';
+    require_once 'models/Message.php';
     
     // セッションスタート
     session_start();
@@ -13,28 +13,32 @@
         
     // idを指定せずに実行されたならば
     if($id === ""){
+        // セッションにエラーメッセージを保存
         $_SESSION['error'] = '不正アクセスです';
+        // リダイレクト
         header('Location: index.php');
         exit;
     }
     
     // 注目してるメッセージインスタンスを取得
-    $message = MessageDAO::get_message_by_id($id);
+    $message = Message::find($id);
     
     // そのような投稿が存在すれば
     if($message !== false){
         // データベースからデータ削除
-        $flash_message = MessageDAO::delete($id);
+        $flash_message = Message::destroy($id);
         
         // フラッシュメッセージのセット
         $_SESSION['flash_message'] = $flash_message;
         
-        // 画面遷移
+        // リダイレクト
         header('Location: index.php');
         exit;
 
     }else{
+        // エラーメッセージのセット
         $_SESSION['error'] = '存在しない投稿です';
+        // リダイレクト
         header('Location: index.php');
         exit;
     }

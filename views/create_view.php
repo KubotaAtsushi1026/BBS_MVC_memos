@@ -26,7 +26,7 @@
             <?php endif; ?>
             
             <div class="row mt-2">
-                <form class="col-sm-12" action="create.php" method="POST" enctype="multipart/form-data">
+                <form class="col-sm-12" action="store.php" method="POST" enctype="multipart/form-data">
                     <!-- 1行 -->
                     <div class="form-group row">
                         <label class="col-2 col-form-label">名前</label>

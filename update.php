@@ -3,7 +3,7 @@
     
     // 外部ファイルの読み込み
     require_once 'filters/post_filter.php';
-    require_once 'daos/MessageDAO.php';
+    require_once 'models/Message.php';
     
     // セッション開始
     session_start();
@@ -12,7 +12,7 @@
     $id = $_POST['id'];
     
     // 注目してるメッセージインスタンスを取得
-    $message = MessageDAO::get_message_by_id($id);
+    $message = Message::find($id);
 
     // そのような投稿が存在すれば
     if($message !== false){
@@ -20,13 +20,14 @@
         $name = $_POST['name'];
         $title = $_POST['title'];
         $body = $_POST['body'];
+        $image = $_FILES['image']['name'];
         
         // 画像が選択されていれば
-        if($_FILES['image']['size'] !== 0){
-            // 画像ファイルの物理的アップロード処理
-            $image = MessageDAO::upload();
-        }else {
+        if($_FILES['image']['size'] === 0){
             $image = $message->image;
+        }else{
+            // 前回の画像ファイル名を取得
+            $pre_image = $message->image;
         }
         
         // インスタンス情報の更新
@@ -36,30 +37,42 @@
         $message->image = $image;
         
         // 入力チェック
-        $errors = $message->validate($message);
+        $errors = $message->validate();
         
         // 入力エラーが1つもなければ
         if(count($errors) === 0){
-            // データベースを更新
-            $flash_message = MessageDAO::update($message);
+            // 新しい画像が選択されていれば
+            if($_FILES['image']['size'] !== 0){
+                // 前回の画像の物理削除
+                unlink(IMAGE_DIR . $pre_image);
+                // 新規画像の物理的アップロード
+                $image = Message::upload();
+                // インスタンスの画像ファイル名の更新
+                $message->image = $image;
+            }
+            
+            // データベースの更新
+            $flash_message = $message->save();
             
             // セッションにフラッシュメッセージを保存        
             $_SESSION['flash_message'] = $flash_message;
             
-            // 画面遷移
+            // リダイレクト
             header('Location: show.php?id=' . $id);
             exit;
             
         }else{
             // セッションにエラー配列をセット
             $_SESSION['errors'] = $errors;
-            // 画面遷移
+            // リダイレクト
             header('Location: edit.php?id=' . $id);
             exit;
         }
         
     }else{
+        // セッションにエラーメッセージをセット
         $_SESSION['error'] = '存在しない投稿です';
+        // リダイレクト
         header('Location: index.php');
         exit;
     }
